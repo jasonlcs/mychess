@@ -2,15 +2,15 @@ input.onGesture(Gesture.LogoUp, function () {
     movePositionByShake("DOWN")
 })
 function displayBoard () {
-    setPointLight(1, 1, list[0])
-    setPointLight(2, 1, list[1])
-    setPointLight(3, 1, list[2])
-    setPointLight(1, 2, list[3])
-    setPointLight(2, 2, list[4])
-    setPointLight(3, 2, list[5])
-    setPointLight(1, 3, list[6])
-    setPointLight(2, 3, list[7])
-    setPointLight(3, 3, list[8])
+    setPointLight(1, 1, chessState[0])
+    setPointLight(2, 1, chessState[1])
+    setPointLight(3, 1, chessState[2])
+    setPointLight(1, 2, chessState[3])
+    setPointLight(2, 2, chessState[4])
+    setPointLight(3, 2, chessState[5])
+    setPointLight(1, 3, chessState[6])
+    setPointLight(2, 3, chessState[7])
+    setPointLight(3, 3, chessState[8])
 }
 input.onGesture(Gesture.TiltLeft, function () {
     movePositionByShake("LEFT")
@@ -57,23 +57,23 @@ function movePositionByShake (direction: string) {
 }
 function setChess (player: string, x: number, y: number) {
     if (x == 1 && y == 1) {
-        list[0] = player
+        setChessCheck(0, player)
     } else if (x == 2 && y == 1) {
-        list[1] = player
+        setChessCheck(1, player)
     } else if (x == 3 && y == 1) {
-        list[2] = player
+        setChessCheck(2, player)
     } else if (x == 1 && y == 2) {
-        list[3] = player
+        setChessCheck(3, player)
     } else if (x == 2 && y == 2) {
-        list[4] = player
+        setChessCheck(4, player)
     } else if (x == 3 && y == 2) {
-        list[5] = player
+        setChessCheck(5, player)
     } else if (x == 1 && y == 3) {
-        list[6] = player
+        setChessCheck(6, player)
     } else if (x == 2 && y == 3) {
-        list[7] = player
+        setChessCheck(7, player)
     } else if (x == 3 && y == 3) {
-        list[8] = player
+        setChessCheck(8, player)
     } else {
     	
     }
@@ -82,6 +82,13 @@ input.onButtonPressed(Button.A, function () {
     setChess("O", idxX, idxY)
     led.plot(idxX, idxY)
 })
+function setChessCheck (index: number, player: string) {
+    if (chessState[index] == "N") {
+        chessState[index] = player
+    } else {
+        music.playTone(262, music.beat(BeatFraction.Quarter))
+    }
+}
 input.onGesture(Gesture.LogoDown, function () {
     movePositionByShake("UP")
 })
@@ -105,20 +112,19 @@ function showIndex (x: number, y: number) {
     for (let index = 0; index <= 2; index++) {
         led.unplot(index + 1, 0)
     }
-    for (let index = 0; index <= 2; index++) {
-        led.unplot(0, index + 1)
+    for (let index2 = 0; index2 <= 2; index2++) {
+        led.unplot(0, index2 + 1)
     }
     led.plot(x, 0)
     led.plot(0, y)
 }
-let list: string[] = []
+let chessState: string[] = []
 let idxY = 0
 let idxX = 0
 basic.clearScreen()
-idxX += 1
+idxX = 1
 idxY = 1
-let chessState = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-showIndex(1, 1)
+chessState = ["N", "N", "N", "N", "N", "N", "N", "N", "N"]
 basic.forever(function () {
     displayBoard()
 })
